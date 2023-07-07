@@ -1,53 +1,39 @@
+import { Link } from "react-router-dom";
+
 import { Dropdown } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 const items = [
   {
     key: "1",
     label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.antgroup.com"
-      >
+      <Link to="/">
         <h1 className="font-bold text-lg">Explorar eventos</h1>
         <p>Encontre seu próximo evento em nosso calendário.</p>
-      </a>
+      </Link>
     ),
   },
   {
     key: "2",
     label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.aliyun.com"
-      >
+      <Link to="/create-event">
         <h1 className="font-bold text-lg">Cadastrar evento</h1>
         <p>Crie um evento.</p>
-      </a>
+      </Link>
     ),
   },
   {
     key: "3",
     label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.luohanacademy.com"
-      >
+      <Link to="/profile">
         <h1 className="font-bold text-lg">Minha conta</h1>
         <p>Confira seu perfil e seus eventos.</p>
-      </a>
+      </Link>
     ),
   },
   {
     key: "4",
     label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.luohanacademy.com"
-      >
+      <a target="_blank" rel="noreferrer" href="https://google.com">
         <h1 className="font-bold text-lg text-red-500">Sair</h1>
       </a>
     ),
@@ -56,7 +42,7 @@ const items = [
 
 function Navbar() {
   return (
-    <nav className="px-16 py-2 bg-black text-white h-16 flex items-center justify-between">
+    <nav className="md:px-16 px-6 py-2 bg-black text-white h-16 flex items-center justify-between">
       <img src="/assets/EventHub.png" alt="EventHub" className="w-32 h-auto" />
       <Dropdown
         menu={{
