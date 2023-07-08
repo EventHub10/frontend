@@ -42,12 +42,12 @@ const SignUp = () => {
     console.log("Failed:", errorInfo);
   };
   return (
-    <>
+    <div className="flex flex-col items-center">
       {contextHolder}
-      <h1 className="text-center text-white text-3xl font-bold px-8">
-        Bem-vindo!
+      <h1 className="text-center text-white text-3xl font-bold mx-8">
+        Cadastro
       </h1>
-      <p className="text-center text-white px-8">
+      <p className="text-center text-white mx-8">
         Crie sua conta e faça parte da comunidade EventHub.
       </p>
       <Form
@@ -57,7 +57,7 @@ const SignUp = () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-        className="max-w-[700px] mx-auto p-8"
+        className="md:w-[600px] w-full p-8"
       >
         <Form.Item
           name="name"
@@ -110,7 +110,7 @@ const SignUp = () => {
           </Button>
         </Form.Item>
       </Form>
-    </>
+    </div>
   );
 };
 
