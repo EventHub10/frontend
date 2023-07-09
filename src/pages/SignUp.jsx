@@ -87,7 +87,7 @@ const SignUp = () => {
           <Input
             prefix={<PictureOutlined className="primary-color" />}
             type="name"
-            placeholder="Foto"
+            placeholder="Url da foto de perfil"
             className="custom-input"
           />
         </Form.Item>
