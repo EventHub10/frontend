@@ -31,7 +31,7 @@ const SignUp = () => {
       location: values.location,
       price: values.price,
       link_to_buy: values.link_to_buy,
-      date: values.date,
+      date: values.event_date,
       confirmed_people: [],
       organizer: "import from user",
     };
