@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
-import { Dropdown } from "antd";
-import { MenuOutlined } from "@ant-design/icons";
+import { Dropdown, Input } from "antd";
+import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 const items = [
   {
     key: "1",
@@ -50,7 +50,15 @@ function Navbar() {
         }}
         placement="bottom"
       >
-        <MenuOutlined className="text-white text-xl" />
+        <div className="flex gap-4">
+          <Input
+            prefix={<SearchOutlined className="primary-color" />}
+            type="text"
+            placeholder="Buscar Eventos..."
+            className="custom-input rounded-2xl"
+          />
+          <MenuOutlined className="text-white text-xl" />
+        </div>
       </Dropdown>
     </nav>
   );
