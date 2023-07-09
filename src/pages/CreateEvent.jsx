@@ -24,7 +24,7 @@ const SignUp = () => {
   };
 
   const onFinish = (values) => {
-    let formEvent = {
+    const formEvent = {
       title: values.title,
       description: values.description,
       photo: values.photo,

@@ -26,7 +26,7 @@ const SignUp = () => {
   };
 
   const onFinish = (values) => {
-    let formUser = {
+    const formUser = {
       name: values.name,
       email: values.email,
       password: values.password,
@@ -87,7 +87,7 @@ const SignUp = () => {
           <Input
             prefix={<PictureOutlined className="primary-color" />}
             type="name"
-            placeholder="Url da foto de perfil"
+            placeholder="Link da foto de perfil"
             className="custom-input"
           />
         </Form.Item>

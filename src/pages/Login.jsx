@@ -17,7 +17,7 @@ const Login = () => {
   };
 
   const onFinish = (values) => {
-    let formUser = {
+    const formUser = {
       email: values.email,
       password: values.password,
     };
