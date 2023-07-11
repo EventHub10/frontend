@@ -1,4 +1,5 @@
 import { Button, Form, Input, message } from "antd";
+import axios from "axios";
 import {
   LockOutlined,
   UserOutlined,
@@ -13,29 +14,38 @@ const SignUp = () => {
   const success = () => {
     messageApi.open({
       type: "success",
-      content: "Usuário cadastrado",
+      content: "Usuário cadastrado com sucesso.",
       duration: 3,
     });
   };
-  const error = () => {
+  const error = (message) => {
     messageApi.open({
       type: "error",
-      content: "Preencha todos os campos do formulário",
+      content: message,
       duration: 3,
     });
   };
-
-  const onFinish = (values) => {
+  
+  const onFinish = async (values) => {
     const formUser = {
       name: values.name,
       email: values.email,
       password: values.password,
       photo: values.photo,
-      user_events: [],
     };
     console.log("user: ", formUser);
-    success();
-    form.resetFields();
+    try{
+      let result = await axios.post(`https://0da6-45-178-118-14.ngrok-free.app/api/user/`, formUser)
+      if (result.status === 200){
+        success();
+        form.resetFields();
+        navigate("/login")
+      }
+      console.log("user: ", formUser);
+    } catch(e){
+        error(e.message)
+    }
+
   };
   const onFinishFailed = (errorInfo) => {
     error();

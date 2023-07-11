@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios"
 import { Button, Form, Input, message } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 
@@ -16,13 +16,32 @@ const Login = () => {
     });
   };
 
-  const onFinish = (values) => {
+  const error_on_login = () => {
+    messageApi.open({
+      type: "error",
+      content: "Senha ou email incorreto.",
+      duration: 3,
+    });
+  };
+
+  const onFinish = async(values) => {
     const formUser = {
       email: values.email,
       password: values.password,
     };
-    console.log("user: ", formUser);
-    form.resetFields();
+    try{
+      let result = await axios.post(`https://0da6-45-178-118-14.ngrok-free.app/api/user/login?email=${values.email}&senha=${values.password}`)
+      if (result.status === 200){
+        let token = result.data
+        localStorage.setItem('token', token.replace("Bearer ", ""))
+        form.resetFields();
+        navigate("/")
+      }
+      console.log("user: ", formUser);
+    } catch(error){
+        error_on_login()
+    }
+    
   };
   const onFinishFailed = (errorInfo) => {
     error();
