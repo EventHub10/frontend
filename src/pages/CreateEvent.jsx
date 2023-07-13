@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import { Button, Form, Input, message } from "antd";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [photoLink, setPhotoLink] = useState("");
   const [inputPhoto, setInputPhoto] = useState("");
+
+  const user = {
+    id: "7b9cfd85-d0a3-4608-8e89-ae313a62e409",
+  };
 
   const success = () => {
     messageApi.open({
@@ -23,20 +30,40 @@ const SignUp = () => {
     });
   };
 
-  const onFinish = (values) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("token"),
+    },
+  };
+
+  const onFinish = async (values) => {
     const formEvent = {
-      title: values.title,
-      description: values.description,
-      photo: values.photo,
-      location: values.location,
-      price: values.price,
+      ownerId: user.id,
+      event_title: values.title,
+      event_photo: values.photo,
+      event_date: values.event_date,
+      event_price: values.price,
       link_to_buy: values.link_to_buy,
-      date: values.event_date,
-      confirmed_people: [],
-      organizer: "import from user",
+      location: values.location,
+      description: values.description,
     };
-    console.log("event: ", formEvent);
-    success();
+
+    try {
+      const result = await axios.post(
+        `http://localhost:5101/api/event/`,
+        formEvent,
+        config
+      );
+      if (result.status === 200) {
+        success();
+        form.resetFields();
+        navigate("/");
+      }
+    } catch (e) {
+      console.log(e);
+      error(e);
+    }
     form.resetFields();
   };
 

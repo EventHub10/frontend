@@ -1,12 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
 import Event from "../components/Event";
 
 const Profile = () => {
-  // const navigate = useNavigate();
-
   const user = {
     name: "Jorge Douglas",
     email: "jorge@gmail.com",
@@ -42,6 +42,34 @@ const Profile = () => {
     }
     return "https://www.steaua-dunarii.ro/client/img/image-not-found.png";
   };
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  };
+
+  const getData = async () => {
+    console.log("testeeeee");
+    console.log("aqui ", config);
+    try {
+      const result = await axios.get(
+        `http://localhost:5101/api/event/`,
+        config
+      );
+      if (result.status === 200) {
+        console.log("deu certo o get dos eventos!", result);
+      }
+    } catch (e) {
+      console.log("deu errado o get dos eventos", e);
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center">

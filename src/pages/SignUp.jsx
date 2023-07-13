@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, message } from "antd";
 import axios from "axios";
 import {
@@ -8,6 +9,7 @@ import {
 } from "@ant-design/icons";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -18,6 +20,7 @@ const SignUp = () => {
       duration: 3,
     });
   };
+
   const error = (message) => {
     messageApi.open({
       type: "error",
@@ -25,7 +28,13 @@ const SignUp = () => {
       duration: 3,
     });
   };
-  
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
   const onFinish = async (values) => {
     const formUser = {
       name: values.name,
@@ -34,23 +43,27 @@ const SignUp = () => {
       photo: values.photo,
     };
     console.log("user: ", formUser);
-    try{
-      let result = await axios.post(`https://0da6-45-178-118-14.ngrok-free.app/api/user/`, formUser)
-      if (result.status === 200){
+    try {
+      let result = await axios.post(
+        `http://localhost:5101/api/user/`,
+        formUser,
+        config
+      );
+      if (result.status === 200) {
         success();
         form.resetFields();
-        navigate("/login")
+        navigate("/login");
       }
-      console.log("user: ", formUser);
-    } catch(e){
-        error(e.message)
+    } catch (e) {
+      error(e.message);
     }
-
   };
+
   const onFinishFailed = (errorInfo) => {
     error();
-    console.log("Failed:", errorInfo);
+    console.error("Error:", errorInfo);
   };
+
   return (
     <div className="flex flex-col items-center">
       {contextHolder}
