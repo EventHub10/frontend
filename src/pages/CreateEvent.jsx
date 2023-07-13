@@ -11,10 +11,6 @@ const SignUp = () => {
   const [photoLink, setPhotoLink] = useState("");
   const [inputPhoto, setInputPhoto] = useState("");
 
-  const user = {
-    id: "7b9cfd85-d0a3-4608-8e89-ae313a62e409",
-  };
-
   const success = () => {
     messageApi.open({
       type: "success",
@@ -33,13 +29,13 @@ const SignUp = () => {
   const config = {
     headers: {
       "Content-Type": "application/json",
-      token: localStorage.getItem("token"),
+      "Authorization": localStorage.getItem("token"),
     },
   };
 
   const onFinish = async (values) => {
     const formEvent = {
-      ownerId: user.id,
+      ownerId: localStorage.getItem("userId") ?? null,
       event_title: values.title,
       event_photo: values.photo,
       event_date: values.event_date,
