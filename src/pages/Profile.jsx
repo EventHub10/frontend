@@ -1,15 +1,17 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-// import { updateUser } from "../store/actions";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUser, updateEvents } from "../store/actions";
 
 import { EditOutlined } from "@ant-design/icons";
 import Event from "../components/Event";
 
 const Profile = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const events = useSelector((state) => state.events);
+  const userId = localStorage.getItem("userId") ?? null;
 
   const isImageLink = (link) => {
     const imageRegex = /\.(jpeg|jpg|gif|png)/i;
@@ -23,24 +25,31 @@ const Profile = () => {
     return "https://www.steaua-dunarii.ro/client/img/image-not-found.png";
   };
 
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  };
+  // const config = {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //   },
+  // };
 
   const getData = async () => {
-    try {
-      const result = await axios.get(
-        `http://localhost:5101/api/event/`,
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { events } = await axios.get(
+      "http://localhost:5101/api/event",
+      config
+    );
+    dispatch(updateEvents(events));
+    if (userId.length > 0) {
+      const _user = await axios.get(
+        `http://localhost:5101/api/user/${userId}`,
         config
       );
-      if (result.status === 200) {
-        console.log("deu certo o get dos eventos!", result);
-      }
-    } catch (e) {
-      console.error(e);
+      dispatch(updateUser(_user.data));
     }
   };
 
@@ -67,11 +76,13 @@ const Profile = () => {
             </div>
           </div>
           <div className="events w-full flex flex-col justify-center my-8 px-4 gap-2">
-            <Event link={getPhoto(user.photo)} user={user} event={event} />
-            <Event link={getPhoto(user.photo)} user={user} event={event} />
-            <Event link={getPhoto(user.photo)} user={user} event={event} />
-            <Event link={getPhoto(user.photo)} user={user} event={event} />
-            <Event link={getPhoto(user.photo)} user={user} event={event} />
+            {user &&
+              events &&
+              events.map((item) => {
+                if (user.id == events.ownerId) {
+                  return <Event key={item.id} event={item} />;
+                }
+              })}
           </div>
         </div>
       )}

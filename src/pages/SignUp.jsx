@@ -42,7 +42,6 @@ const SignUp = () => {
       password: values.password,
       photo: values.photo,
     };
-    console.log("user: ", formUser);
     try {
       let result = await axios.post(
         `http://localhost:5101/api/user/`,

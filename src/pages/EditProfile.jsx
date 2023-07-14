@@ -67,7 +67,7 @@ const EditProfile = () => {
 
   const onFinishFailed = (errorInfo) => {
     error();
-    console.log("Failed:", errorInfo);
+    console.log("Error:", errorInfo);
   };
 
   const isImageLink = (link) => {

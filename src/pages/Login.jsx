@@ -31,21 +31,18 @@ const Login = () => {
         localStorage.setItem("token", token);
         localStorage.setItem("userId", user.id);
         form.resetFields();
-        console.log("result: ", result);
-        console.log("user 1", user);
         dispatch(updateUser(result.data.user));
-        console.log("user 2", user);
         navigate("/");
       }
     } catch (er) {
       console.error('Erro: ', er)
-      error("Usuário ja existe ou senha incorreta.");
+      error("Algo deu errado.");
     }
   };
 
   const onFinishFailed = (errorInfo) => {
     error("Preencha todos os campos do formulário");
-    console.log("Failed:", errorInfo);
+    console.log("Error:", errorInfo);
   };
 
   const navigateToSignup = () => {
@@ -84,7 +81,6 @@ const Login = () => {
         <Form.Item
           name="password"
           rules={[{ required: true, message: "Digite sua senha." }]}
-          className="mb-0"
         >
           <Input
             prefix={<LockOutlined className="primary-color" />}

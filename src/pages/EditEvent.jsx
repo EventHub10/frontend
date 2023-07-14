@@ -35,14 +35,14 @@ const EditEvent = () => {
       confirmed_people: [],
       organizer: "import from user",
     };
-    console.log("event: ", formEvent);
+    console.log("Error: ", formEvent);
     success();
     form.resetFields();
   };
 
   const onFinishFailed = (errorInfo) => {
     error();
-    console.log("Failed:", errorInfo);
+    console.log("Error:", errorInfo);
   };
 
   const isImageLink = (link) => {

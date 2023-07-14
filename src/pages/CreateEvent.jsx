@@ -64,7 +64,7 @@ const SignUp = () => {
         navigate("/");
       }
     } catch (e) {
-      console.log(e);
+      console.log('Error: ', e);
       error(e);
     }
     form.resetFields();
@@ -72,7 +72,7 @@ const SignUp = () => {
 
   const onFinishFailed = (errorInfo) => {
     error();
-    console.log("Failed:", errorInfo);
+    console.log("Error:", errorInfo);
   };
 
   function isImageLink(link) {
