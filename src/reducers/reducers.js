@@ -1,6 +1,6 @@
 const INITIAL_STATE = {
   counter: 0,
-  user: false,
+  user: {},
 };
 
 const actionsReducer = (state = INITIAL_STATE, action) => {
@@ -8,7 +8,7 @@ const actionsReducer = (state = INITIAL_STATE, action) => {
     case "UPDATE_USER":
       return {
         ...state,
-        user: !state.user,
+        user: action.content,
       };
 
     default:

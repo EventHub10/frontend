@@ -1,14 +1,18 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUser } from "../store/actions";
 
 import { Dropdown, Input } from "antd";
 import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 
 function Navbar() {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const logout = () => {
     localStorage.setItem("token", null);
+    localStorage.setItem("userId", null);
+    dispatch(updateUser({}));
   };
 
   const items = [
@@ -24,7 +28,7 @@ function Navbar() {
     {
       key: "2",
       label: (
-        <Link to={user ? "/profile" : "/login"}>
+        <Link to={user.id ? "/profile" : "/login"}>
           <h1 className="font-bold text-lg">Cadastrar evento</h1>
           <p>Crie um evento.</p>
         </Link>
@@ -33,7 +37,7 @@ function Navbar() {
     {
       key: "3",
       label: (
-        <Link to={user ? "/profile" : "/login"}>
+        <Link to={user.id ? "/profile" : "/login"}>
           <h1 className="font-bold text-lg">Minha conta</h1>
           <p>Confira seu perfil e seus eventos.</p>
         </Link>
@@ -43,12 +47,12 @@ function Navbar() {
       key: "4",
       label: (
         <>
-          {user ? (
+          {user.id ? (
             <a onClick={logout}>
               <h1 className="font-bold text-lg text-red-500">Sair</h1>
             </a>
           ) : (
-            <Link to={user ? "/profile" : "/login"}>
+            <Link to={user.id ? "/profile" : "/login"}>
               <h1 className="font-bold text-lg">Fazer login ou cadastro</h1>
               <p>Faça parte da comunidade EventHub.</p>
             </Link>

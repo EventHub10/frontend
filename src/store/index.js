@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import actionsReducer from "../reducers/counterRedux";
+import actionsReducer from "../reducers/reducers";
 
 const store = configureStore({reducer: actionsReducer});
 
