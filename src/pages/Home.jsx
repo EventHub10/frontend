@@ -31,7 +31,7 @@ const Home = () => {
       {events.map(event => {
         let userId = localStorage.getItem("userId")
         return (
-          <Event userId={userId} event={event} />
+          <Event userId={userId} event={event} key={event.id}/>
         )
       })}
     </div>
