@@ -34,7 +34,7 @@ const SignUp = () => {
   const config = {
     headers: {
       "Content-Type": "application/json",
-      "Authorization": localStorage.getItem("token"),
+      Authorization: localStorage.getItem("token"),
     },
   };
 
@@ -59,13 +59,13 @@ const SignUp = () => {
       );
       if (result.status === 200) {
         success();
-        dispatch(updateEvents([...events, result.data]));
+        const allEvents = events.push(result.data);
+        dispatch(updateEvents(allEvents));
         form.resetFields();
         navigate("/");
       }
     } catch (e) {
-      console.log('Error: ', e);
-      error(e);
+      console.log("Alert: ", e);
     }
     form.resetFields();
   };
@@ -75,13 +75,8 @@ const SignUp = () => {
     console.log("Error:", errorInfo);
   };
 
-  function isImageLink(link) {
-    const imageRegex = /\.(jpeg|jpg|gif|png)/i;
-    return imageRegex.test(link);
-  }
-
   useEffect(() => {
-    if (isImageLink(inputPhoto)) {
+    if (inputPhoto) {
       setPhotoLink(inputPhoto);
     } else {
       setPhotoLink(

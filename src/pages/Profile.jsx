@@ -1,61 +1,19 @@
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { updateUser, updateEvents } from "../store/actions";
+import { useSelector } from "react-redux";
 
 import { EditOutlined } from "@ant-design/icons";
 import Event from "../components/Event";
 
 const Profile = () => {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const events = useSelector((state) => state.events);
-  const userId = localStorage.getItem("userId") ?? null;
-
-  const isImageLink = (link) => {
-    const imageRegex = /\.(jpeg|jpg|gif|png)/i;
-    return imageRegex.test(link);
-  };
 
   const getPhoto = (photoLink) => {
-    if (isImageLink(photoLink)) {
+    if (photoLink) {
       return photoLink;
     }
     return "https://www.steaua-dunarii.ro/client/img/image-not-found.png";
   };
-
-  // const config = {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //   },
-  // };
-
-  const getData = async () => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const { events } = await axios.get(
-      "http://localhost:5101/api/event",
-      config
-    );
-    dispatch(updateEvents(events));
-    if (userId.length > 0) {
-      const _user = await axios.get(
-        `http://localhost:5101/api/user/${userId}`,
-        config
-      );
-      dispatch(updateUser(_user.data));
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
     <>
@@ -79,7 +37,7 @@ const Profile = () => {
             {user &&
               events &&
               events.map((item) => {
-                if (user.id == events.ownerId) {
+                if (user.id == item.ownerId) {
                   return <Event key={item.id} event={item} />;
                 }
               })}

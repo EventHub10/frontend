@@ -55,9 +55,8 @@ const EditProfile = () => {
       );
       if (result.status === 200) {
         success();
-        form.resetFields();
-        setPhotoLink("");
         dispatch(updateUser(result.data));
+        form.resetFields();
         navigate("/profile");
       }
     } catch (exception) {
@@ -70,24 +69,13 @@ const EditProfile = () => {
     console.log("Error:", errorInfo);
   };
 
-  const isImageLink = (link) => {
-    const imageRegex = /\.(jpeg|jpg|gif|png)/i;
-    return imageRegex.test(link);
-  };
-
-  const deletProfile = () => {
-    console.log("deletar perfil");
-  };
-
   useEffect(() => {
-    if (!inputPhoto) {
-      if (isImageLink(inputPhoto)) {
-        setPhotoLink(inputPhoto);
-      } else {
-        setPhotoLink(
-          "https://www.steaua-dunarii.ro/client/img/image-not-found.png"
-        );
-      }
+    if (inputPhoto) {
+      setPhotoLink(inputPhoto);
+    } else {
+      setPhotoLink(
+        "https://www.steaua-dunarii.ro/client/img/image-not-found.png"
+      );
     }
   }, [inputPhoto]);
 
@@ -97,8 +85,7 @@ const EditProfile = () => {
       photo: user.photo,
     };
     form.setFieldsValue(initialValues);
-    setPhotoLink(form.getFieldValue().photo);
-  }, [user, form]);
+  }, []);
 
   return (
     <div className="flex flex-col items-center">
@@ -114,7 +101,7 @@ const EditProfile = () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-        className="md:w-[600px] w-full p-8 pb-0"
+        className="md:w-[600px] w-full p-8"
       >
         <Form.Item
           name="name"
@@ -138,22 +125,12 @@ const EditProfile = () => {
           />
         </Form.Item>
 
-        <Form.Item className="mb-3">
+        <Form.Item>
           <Button className="primary-button" htmlType="submit" block>
             ATUALIZAR PERFIL
           </Button>
         </Form.Item>
       </Form>
-      <div className="md:w-[600px] w-full px-8 pt-0 pb-8">
-        <Button
-          className="delete-button"
-          htmlType="submit"
-          block
-          onClick={deletProfile}
-        >
-          EXCLUIR PERFIL
-        </Button>
-      </div>
     </div>
   );
 };

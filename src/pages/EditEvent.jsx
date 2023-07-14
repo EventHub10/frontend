@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { Button, Form, Input, message } from "antd";
-import axios from 'axios';
-import { useParams } from "react-router-dom"
-import {useNavigate} from 'react-router-dom'
-
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { updateEvents } from "../store/actions";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 const EditEvent = () => {
-  let params = useParams()
+  const dispatch = useDispatch();
+  const params = useParams();
   const navigate = useNavigate();
 
   const [form] = Form.useForm();
@@ -29,17 +32,16 @@ const EditEvent = () => {
     });
   };
 
-  const onFinish = async(values) => {
-
+  const onFinish = async (values) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": localStorage.getItem("token"),
+        Authorization: localStorage.getItem("token"),
       },
     };
 
-    let formEvent = {
-      id: params.eventId, 
+    const formEvent = {
+      id: params.eventId,
       event_title: values.event_title,
       description: values.description,
       event_photo: values.event_photo,
@@ -50,16 +52,24 @@ const EditEvent = () => {
     };
 
     try {
-      let result = await axios.put("http://localhost:5101/api/event", formEvent, config)
+      const result = await axios.put(
+        "http://localhost:5101/api/event",
+        formEvent,
+        config
+      );
 
-      if(result.status === 200) {
+      if (result.status === 200) {
+        const _events = await axios.get(
+          "http://localhost:5101/api/event",
+          config
+        );
+        dispatch(updateEvents(_events.data));
         success();
+        navigate("/");
       }
-      
-    }catch(exception) {
-      console.error(exception.message)
+    } catch (exception) {
+      console.error(exception.message);
     }
-    
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -67,17 +77,30 @@ const EditEvent = () => {
     console.log("Error:", errorInfo);
   };
 
-  const isImageLink = (link) => {
-    const imageRegex = /\.(jpeg|jpg|gif|png)/i;
-    return imageRegex.test(link);
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
   };
 
-  const deleteEvent = () => {
-    console.log('deletar')
-  }
+  const deleteEvent = async () => {
+    try {
+      const result = await axios.delete(
+        `http://localhost:5101/api/event/${params.eventId}`,
+        config
+      );
+
+      if (result.status === 200) {
+        navigate("/");
+      }
+    } catch (exception) {
+      console.error("Erro ao excluir evento.");
+    }
+  };
 
   useEffect(() => {
-    if (isImageLink(inputPhoto)) {
+    if (inputPhoto) {
       setPhotoLink(inputPhoto);
     } else {
       setPhotoLink(
@@ -88,19 +111,22 @@ const EditEvent = () => {
 
   const getEventById = async (id) => {
     try {
-      let result = await axios.get(`http://localhost:5101/api/event/${id}`)
-      if(result.status === 200) {
+      const result = await axios.get(`http://localhost:5101/api/event/${id}`);
+      if (result.status === 200) {
+        result.data.event_date = dayjs(result.data.event_date).format(
+          "YYYY-MM-DD"
+        );
         form.setFieldsValue(result.data);
         setPhotoLink(result.data.event_photo);
       }
-    }catch(exception){
-      console.error("Aconteceu algum erro. Recarregue a página.")
+    } catch (exception) {
+      console.error("Aconteceu algum erro. Recarregue a página.");
     }
-  }
+  };
 
   useEffect(() => {
-    getEventById(params.eventId)
-  }, [navigate, params.eventId])
+    getEventById(params.eventId);
+  }, [navigate, params.eventId]);
 
   return (
     <div className="flex flex-col items-center">

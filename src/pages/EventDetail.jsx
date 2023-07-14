@@ -1,49 +1,67 @@
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import InfoButton from "../components/InfoButton";
 
 const EventDetail = () => {
-  const event = {
-    title: "Festa do peao",
-    description: "evento rapido",
-    photo:
-      "https://media.istockphoto.com/id/1270987867/pt/foto/close-up-young-smiling-man-in-casual-clothes-posing-isolated-on-blue-wall-background-studio.jpg?s=612x612&w=0&k=20&c=yl2rYQMNKmFqNOSaKplUd8doJAnEuTHEZcmUI45XkJo=",
-    location: "Palacio Sunset",
-    price: 10,
-    link_to_buy: "https://byma.com.br/event/6491f300b575750008d79e1f",
-    event_date: "2023-08-03",
-    confirmed_people: ["id123", "id2345"],
-    organizer: "Michael Douglas",
-    id: "t4rwfwq133vd",
-  };
-
-  const isImageLink = (link) => {
-    const imageRegex = /\.(jpeg|jpg|gif|png)/i;
-    return imageRegex.test(link);
-  };
+  const params = useParams();
+  const [photoLink, setPhotoLink] = useState("");
+  const [event, setEvent] = useState({
+    id: params.eventId,
+    event_title: "",
+    description: "",
+    event_photo: "",
+    location: "",
+    event_price: "",
+    link_to_buy: "",
+    event_date: "",
+  });
 
   const getPhoto = (photoLink) => {
-    if (isImageLink(photoLink)) {
-      return photoLink;
+    if (photoLink) {
+      setPhotoLink(photoLink);
+    } else {
+      setPhotoLink(
+        "https://www.steaua-dunarii.ro/client/img/image-not-found.png"
+      );
     }
-    return "https://www.steaua-dunarii.ro/client/img/image-not-found.png";
   };
+
+  const getEventById = async (id) => {
+    try {
+      let result = await axios.get(`http://localhost:5101/api/event/${id}`);
+      if (result.status === 200) {
+        setEvent(result.data);
+        console.log("event", event);
+        getPhoto(result.data.event_photo);
+      }
+    } catch (exception) {
+      console.error("Aconteceu algum erro. Recarregue a página.");
+    }
+  };
+
+  useEffect(() => {
+    console.log("entrou aqui");
+    getEventById(params.eventId);
+  }, []);
 
   return (
     <div className="flex flex-col items-center">
       <img
-        src={getPhoto(event.photo)}
-        className="md:w-[600px] w-full h-[150px] rounded-2xl px-2 mt-8 mb-4"
+        src={photoLink}
+        className="md:w-[600px] w-full h-[150px] rounded-3xl px-2 mt-8 mb-4"
       />
       <div className="flex">
         <h1 className="text-center text-white text-3xl font-bold ">
-          {event.title}
+          {event.event_title}
         </h1>
         <div className="flex justify-center ml-[8px] mt-[8px]">
-          <Link to={`/edit-event:${event.id}`} className="edit-button">
+          <Link to={`/edit-event/${params.eventId}`} className="edit-button">
             <EditOutlined className="text-[14px] text-white icon" />
           </Link>
         </div>
@@ -69,23 +87,23 @@ const EventDetail = () => {
       <div>
         <div className="people flex justify-center mt-4 mb-2">
           <img
-            src={getPhoto(event.photo)}
+            src={event.photo}
             className="w-[32px] h-[32px] rounded-2xl person"
           />
           <img
-            src={getPhoto(event.photo)}
+            src={event.photo}
             className="w-[32px] h-[32px] rounded-2xl person"
           />
           <img
-            src={getPhoto(event.photo)}
+            src={event.photo}
             className="w-[32px] h-[32px] rounded-2xl person"
           />
           <img
-            src={getPhoto(event.photo)}
+            src={event.photo}
             className="w-[32px] h-[32px] rounded-2xl person"
           />
           <img
-            src={getPhoto(event.photo)}
+            src={event.photo}
             className="w-[32px] h-[32px] rounded-2xl person"
           />
         </div>
