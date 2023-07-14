@@ -8,7 +8,7 @@ import { EditOutlined } from "@ant-design/icons";
 import { Button, message } from "antd";
 import InfoButton from "../components/InfoButton";
 import { useSelector } from "react-redux";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 const EventDetail = () => {
   const params = useParams();
@@ -25,7 +25,7 @@ const EventDetail = () => {
     event_price: "",
     link_to_buy: "",
     event_date: "",
-    confirmed_peoples: []
+    confirmed_peoples: [],
   });
 
   const error = (msg) => {
@@ -68,30 +68,31 @@ const EventDetail = () => {
   };
 
   const confirmPresence = async () => {
-    if(!user.id){
-      navigate("/login")
-      return
+    if (!user.id) {
+      navigate("/login");
+      return;
     }
     const config = {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": localStorage.getItem("token"),
+        Authorization: localStorage.getItem("token"),
       },
     };
 
     try {
-      let {status, data} = await axios.post(
-        `http://localhost:5101/api/event/confirmPresence/${user.id}/${params.eventId}`, {}, config)
-      if(status === 200 && data === true){
-        success("Presença confirmada!")
-        getEventById(params.eventId)
+      let { status, data } = await axios.post(
+        `http://localhost:5101/api/event/confirmPresence/${user.id}/${params.eventId}`,
+        {},
+        config
+      );
+      if (status === 200 && data === true) {
+        success("Presença confirmada!");
+        getEventById(params.eventId);
       }
-    
-    }catch(exception){
-      error(exception?.response?.data)
+    } catch (exception) {
+      error(exception?.response?.data);
     }
-
-  }
+  };
 
   useEffect(() => {
     console.log("entrou aqui");
@@ -118,38 +119,37 @@ const EventDetail = () => {
       <p className="text-white">{event.description}</p>
       <div className="flex gap-1 justify-center flex-wrap my-4">
         <InfoButton
-          link={"https://google.com"}
+          link={event.link_to_buy}
           main_text={"Comprar ingresso"}
           secondary_text={"R$30,00"}
         />
         <InfoButton
-          link={"https://google.com"}
+          link={event.link_to_buy}
           main_text={event.location}
           secondary_text={"Local"}
         />
         <InfoButton
-          link={"https://google.com"}
+          link={event.link_to_buy}
           main_text={dayjs(event.event_date).format("DD/MM/YYYY")}
-          secondary_text={"Terça-feira"}
+          secondary_text={"Data"}
         />
       </div>
-      <div>
+      {event.confirmed_peoples.length && (
         <div className="people flex justify-center mt-4 mb-2">
-          {event.confirmed_peoples.length &&
-            event.confirmed_peoples.map(c => {
-              return (
-                <img
-                  key={c.id}
-                  src={c.user.photo}
-                  className="w-[32px] h-[32px] rounded-2xl person"
-                />
-              )
-            })}
+          {event.confirmed_peoples.map((c) => {
+            return (
+              <img
+                key={c.id}
+                src={c.user.photo}
+                className="w-[32px] h-[32px] rounded-2xl person"
+              />
+            );
+          })}
         </div>
-        <Button onClick={confirmPresence} className="primary-button rounded-2xl">
-          CONFIRMAR PRESENÇA
-        </Button>
-      </div>
+      )}
+      <Button onClick={confirmPresence} className="primary-button rounded-2xl">
+        CONFIRMAR PRESENÇA
+      </Button>
     </div>
   );
 };

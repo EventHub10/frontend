@@ -23,10 +23,10 @@ const SignUp = () => {
       duration: 3,
     });
   };
-  const error = () => {
+  const error = (msg) => {
     messageApi.open({
       type: "error",
-      content: "Preencha todos os campos do formulário",
+      content: msg,
       duration: 3,
     });
   };
@@ -65,13 +65,14 @@ const SignUp = () => {
         navigate("/");
       }
     } catch (e) {
+      error("Algo deu errado.")
       console.log("Alert: ", e);
     }
     form.resetFields();
   };
 
   const onFinishFailed = (errorInfo) => {
-    error();
+    error("Preencha todos os campos do formulário");
     console.log("Error:", errorInfo);
   };
 
