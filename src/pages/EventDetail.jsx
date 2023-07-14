@@ -118,7 +118,7 @@ const EventDetail = () => {
           </div>
         )}
       </div>
-      <p className="text-white">{event.description}</p>
+      <p className="text-white max-w-[500px] px-[20px]">{event.description}</p>
       <div className="flex gap-1 justify-center flex-wrap my-4">
         <InfoButton
           link={event.link_to_buy}
