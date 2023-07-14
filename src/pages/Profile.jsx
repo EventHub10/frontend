@@ -61,7 +61,7 @@ const Profile = () => {
               {user.name}
             </h1>
             <div className="flex justify-center ml-[8px] mt-[8px]">
-              <Link to={`/edit-event:${user.id}`} className="edit-button">
+              <Link to={`/edit-profile/`} className="edit-button">
                 <EditOutlined className="text-[14px] text-white icon" />
               </Link>
             </div>

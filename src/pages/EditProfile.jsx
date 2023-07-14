@@ -1,25 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { useSelector, useDispatch } from "react-redux";
+import { updateUser } from "../store/actions";
 
 import { Button, Form, Input, message } from "antd";
 
 const EditProfile = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [photoLink, setPhotoLink] = useState("");
   const [inputPhoto, setInputPhoto] = useState("");
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const user = {
-    name: "Jorge Douglas",
-    email: "jorge@gmail.com",
-    password: "12345678",
-    photo:
-      "https://media.istockphoto.com/id/1270987867/pt/foto/close-up-young-smiling-man-in-casual-clothes-posing-isolated-on-blue-wall-background-studio.jpg?s=612x612&w=0&k=20&c=yl2rYQMNKmFqNOSaKplUd8doJAnEuTHEZcmUI45XkJo=",
-    user_events: [],
-    id: "1243dsvbvarare",
-  };
+  const user = useSelector((state) => state.user);
 
   const success = () => {
     messageApi.open({
@@ -28,6 +22,7 @@ const EditProfile = () => {
       duration: 3,
     });
   };
+
   const error = () => {
     messageApi.open({
       type: "error",
@@ -36,17 +31,36 @@ const EditProfile = () => {
     });
   };
 
-  const onFinish = (values) => {
+  const onFinish = async(values) => {
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": localStorage.getItem("token"),
+      },
+    };
+  
     let formUser = {
+      id: user.id,
       name: values.name,
       photo: values.photo,
+      email: user.email,
+      password: user.password
     };
-    const userUpdated = { ...user, ...formUser };
-    console.log("event: ", userUpdated);
-    success();
-    form.resetFields();
-    setPhotoLink("");
-    navigate("/profile");
+
+    try {
+      let result = await axios.put("http://localhost:5101/api/user", formUser, config)
+      if(result.status === 200){
+        success();
+        form.resetFields();
+        setPhotoLink("");
+        dispatch(updateUser(result.data));
+        navigate("/profile");
+      }
+    }catch(exception){
+      onFinishFailed(exception.message)
+    }
+    
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -59,13 +73,16 @@ const EditProfile = () => {
     return imageRegex.test(link);
   };
 
+
   useEffect(() => {
-    if (isImageLink(inputPhoto)) {
-      setPhotoLink(inputPhoto);
-    } else {
-      setPhotoLink(
-        "https://www.steaua-dunarii.ro/client/img/image-not-found.png"
-      );
+    if(!!inputPhoto){
+      if (isImageLink(inputPhoto)) {
+        setPhotoLink(inputPhoto);
+      } else {
+        setPhotoLink(
+          "https://www.steaua-dunarii.ro/client/img/image-not-found.png"
+        );
+      }
     }
   }, [inputPhoto]);
 
