@@ -26,9 +26,9 @@ const Login = () => {
         `http://localhost:5101/api/user/login?email=${values.email}&senha=${values.password}`
       );
       if (result.status === 200) {
-        const {token, userId} = result.data;
+        const {token, user} = result.data;
         localStorage.setItem("token", token);
-        localStorage.setItem("userId", userId);
+        localStorage.setItem("userId", user.id);
         form.resetFields();
         navigate("/");
       }
