@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateUser } from "../store/actions";
 
 import { Button, Form, Input, message } from "antd";
@@ -8,7 +8,6 @@ import { LockOutlined, MailOutlined } from "@ant-design/icons";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -52,7 +51,6 @@ const Login = () => {
   return (
     <div className="flex flex-col items-center">
       {contextHolder}
-      <p className="text-white">user: {user.token}</p>
       <h1 className="text-center text-white text-3xl font-bold mx-8">Login</h1>
       <p className="text-center text-white mx-8">
         Faça login para criar eventos e compartilhar com seus amigos.

@@ -110,18 +110,20 @@ const EventDetail = () => {
         <h1 className="text-center text-white text-3xl font-bold ">
           {event.event_title}
         </h1>
-        <div className="flex justify-center ml-[8px] mt-[8px]">
-          <Link to={`/edit-event/${params.eventId}`} className="edit-button">
-            <EditOutlined className="text-[14px] text-white icon" />
-          </Link>
-        </div>
+        {user && user.id === event.ownerId && (
+          <div className="flex justify-center ml-[8px] mt-[8px]">
+            <Link to={`/edit-event/${params.eventId}`} className="edit-button">
+              <EditOutlined className="text-[14px] text-white icon" />
+            </Link>
+          </div>
+        )}
       </div>
       <p className="text-white">{event.description}</p>
       <div className="flex gap-1 justify-center flex-wrap my-4">
         <InfoButton
           link={event.link_to_buy}
           main_text={"Comprar ingresso"}
-          secondary_text={"R$30,00"}
+          secondary_text={`R$${event.event_price}`}
         />
         <InfoButton
           link={event.link_to_buy}

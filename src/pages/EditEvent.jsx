@@ -32,14 +32,14 @@ const EditEvent = () => {
     });
   };
 
-  const onFinish = async (values) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: localStorage.getItem("token"),
-      },
-    };
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token"),
+    },
+  };
 
+  const onFinish = async (values) => {
     const formEvent = {
       id: params.eventId,
       event_title: values.event_title,
@@ -77,13 +77,6 @@ const EditEvent = () => {
     console.log("Error:", errorInfo);
   };
 
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: localStorage.getItem("token"),
-    },
-  };
-
   const deleteEvent = async () => {
     try {
       const result = await axios.delete(
@@ -92,6 +85,11 @@ const EditEvent = () => {
       );
 
       if (result.status === 200) {
+        const _events = await axios.get(
+          "http://localhost:5101/api/event",
+          config
+        );
+        dispatch(updateEvents(_events.data));
         navigate("/");
       }
     } catch (exception) {

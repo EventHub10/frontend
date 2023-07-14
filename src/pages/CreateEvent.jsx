@@ -57,15 +57,19 @@ const SignUp = () => {
         formEvent,
         config
       );
-      if (result.status === 200) {
-        success();
-        const allEvents = events.push(result.data);
-        dispatch(updateEvents(allEvents));
+      if (result.status == 200) {
+        console.log("deu 200: ", result);
+        const _events = await axios.get(
+          "http://localhost:5101/api/event",
+          config
+        );
+        dispatch(updateEvents(_events.data));
         form.resetFields();
+        success();
         navigate("/");
       }
     } catch (e) {
-      error("Algo deu errado.")
+      error("Algo deu errado.");
       console.log("Alert: ", e);
     }
     form.resetFields();
