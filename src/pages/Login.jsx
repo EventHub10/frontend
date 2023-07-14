@@ -31,27 +31,24 @@ const Login = () => {
         localStorage.setItem("token", token);
         localStorage.setItem("userId", user.id);
         form.resetFields();
-        console.log("result: ", result);
-        console.log("user 1", user);
         dispatch(updateUser(result.data.user));
-        console.log("user 2", user);
         navigate("/");
       }
     } catch (er) {
       console.error('Erro: ', er)
-      error("Usuário ja existe ou senha incorreta.");
+      error("Algo deu errado.");
     }
   };
+
   const onFinishFailed = (errorInfo) => {
     error("Preencha todos os campos do formulário");
-    console.log("Failed:", errorInfo);
+    console.log("Error:", errorInfo);
   };
+
   const navigateToSignup = () => {
     navigate("/signup");
   };
-  const changePassword = () => {
-    console.log("clicou");
-  };
+
   return (
     <div className="flex flex-col items-center">
       {contextHolder}
@@ -84,7 +81,6 @@ const Login = () => {
         <Form.Item
           name="password"
           rules={[{ required: true, message: "Digite sua senha." }]}
-          className="mb-0"
         >
           <Input
             prefix={<LockOutlined className="primary-color" />}
@@ -94,13 +90,7 @@ const Login = () => {
           />
         </Form.Item>
 
-        <Form.Item className="mt-0 text-right">
-          <a onClick={changePassword} className="forgot-password">
-            Esqueci minha senha
-          </a>
-        </Form.Item>
-
-        <Form.Item className="mb-4">
+        <Form.Item className="mb-3">
           <Button className="primary-button" htmlType="submit" block>
             ENTRAR
           </Button>

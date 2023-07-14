@@ -1,41 +1,41 @@
 import Event from "../components/Event";
 import axios from "axios";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateEvents } from "../store/actions";
+import { updateEvents, updateUser } from "../store/actions";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
   const events = useSelector((state) => state.events);
-  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId") ?? null;
 
-  const getEvents = async () => {
+  const getData = async () => {
     const config = {
       headers: {
-        Authorization: localStorage.getItem("token"),
+        "Content-Type": "application/json",
       },
     };
 
-    const { data } = await axios.get("http://localhost:5101/api/event", config);
-    dispatch(updateEvents(data));
-  };
-
-  const teste = () => {
-    console.log(user);
+    const { events } = await axios.get(
+      "http://localhost:5101/api/event",
+      config
+    );
+    dispatch(updateEvents(events));
+    if (userId.length > 0) {
+      const _user = await axios.get(
+        `http://localhost:5101/api/user/${userId}`,
+        config
+      );
+      dispatch(updateUser(_user.data));
+    }
   };
 
   useEffect(() => {
-    getEvents();
-  }, [navigate]);
+    getData();
+  }, []);
 
   return (
     <div className="events w-full flex flex-col justify-center my-8 px-4 gap-2">
-      <p className="text-white">user: {user.name}</p>
-      <button className="text-white" onClick={teste}>
-        click
-      </button>
       {events &&
         events.map((item) => {
           return <Event key={item.id} event={item} />;

@@ -18,6 +18,16 @@
     color: #fff !important;
   }
 }
+.delete-button {
+  font-weight: bold;
+  background-color: #850303 !important;
+  border: none;
+  &:hover {
+    opacity: 0.8;
+    border: none !important;
+    color: #fff !important;
+  }
+}
 .secondary-button {
   font-weight: bold;
   background-color: #000000 !important;
