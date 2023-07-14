@@ -35,7 +35,7 @@ const Event = ({ event}) => {
       </div>
       {user && user.id === event.ownerId && (
         <div className="flex justify-center mt-[8px]">
-          <Link to={`/edit-event:${event.id}`} className="edit-button">
+          <Link to={`/edit-event/${event.id}`} className="edit-button">
             <EditOutlined className="text-[14px] text-white icon" />
           </Link>
         </div>

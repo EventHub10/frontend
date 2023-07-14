@@ -33,7 +33,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/event-detail" element={<EventDetail />} />
               <Route path="/edit-profile" element={<EditProfile />} />
-              <Route path="/edit-event" element={<EditEvent />} />
+              <Route path="/edit-event/:eventId" element={<EditEvent />} />
             </Routes>
           </div>
           <Footer />
