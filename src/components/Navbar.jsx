@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { Dropdown, Input } from "antd";
 import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
 
 function Navbar() {
-  const user = false;
+  const user = useSelector((state) => state.user);
 
   const logout = () => {
     localStorage.setItem("token", null);

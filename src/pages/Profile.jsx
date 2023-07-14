@@ -1,21 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUser } from "../store/actions";
 
 import { EditOutlined } from "@ant-design/icons";
 import Event from "../components/Event";
 
 const Profile = () => {
-  const user = {
-    name: "Jorge Douglas",
-    email: "jorge@gmail.com",
-    password: "12345678",
-    photo:
-      "https://media.istockphoto.com/id/1270987867/pt/foto/close-up-young-smiling-man-in-casual-clothes-posing-isolated-on-blue-wall-background-studio.jpg?s=612x612&w=0&k=20&c=yl2rYQMNKmFqNOSaKplUd8doJAnEuTHEZcmUI45XkJo=",
-    user_events: [],
-    id: "1243dsvbvarare",
-  };
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const event = {
     title: "Festa do peao",
@@ -73,6 +67,11 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
+      <div>
+        <button className="text-white" onClick={() => dispatch(updateUser())}>
+          Alterar user
+        </button>
+      </div>
       <img
         src={getPhoto(user.photo)}
         className="w-[150px] h-[150px] rounded-full mx-8 mt-8 mb-4"
