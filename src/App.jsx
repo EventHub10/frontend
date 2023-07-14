@@ -32,7 +32,7 @@ function App() {
     const _events = await axios.get("http://localhost:5101/api/event", config);
     dispatch(updateEvents(_events.data));
 
-    if (userId.length > 0) {
+    if (userId?.length > 0) {
       const _user = await axios.get(
         `http://localhost:5101/api/user/${userId}`,
         config

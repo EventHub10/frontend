@@ -5,12 +5,15 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 import { EditOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import InfoButton from "../components/InfoButton";
+import { useSelector } from "react-redux";
 
 const EventDetail = () => {
   const params = useParams();
+  const user = useSelector((state) => state.user);
   const [photoLink, setPhotoLink] = useState("");
+  const [messageApi, contextHolder] = message.useMessage();
   const [event, setEvent] = useState({
     id: params.eventId,
     event_title: "",
@@ -20,7 +23,24 @@ const EventDetail = () => {
     event_price: "",
     link_to_buy: "",
     event_date: "",
+    confirmed_peoples: []
   });
+
+  const error = (msg) => {
+    messageApi.open({
+      type: "error",
+      content: msg,
+      duration: 3,
+    });
+  };
+
+  const success = (msg) => {
+    messageApi.open({
+      type: "success",
+      content: msg,
+      duration: 3,
+    });
+  };
 
   const getPhoto = (photoLink) => {
     if (photoLink) {
@@ -45,6 +65,28 @@ const EventDetail = () => {
     }
   };
 
+  const confirmPresence = async () => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": localStorage.getItem("token"),
+      },
+    };
+
+    try {
+      let {status, data} = await axios.post(
+        `http://localhost:5101/api/event/confirmPresence/${user.id}/${params.eventId}`, {}, config)
+      if(status === 200 && data === true){
+        success("Presença confirmada!")
+        getEventById(params.eventId)
+      }
+    
+    }catch(exception){
+      error(exception?.response?.data)
+    }
+
+  }
+
   useEffect(() => {
     console.log("entrou aqui");
     getEventById(params.eventId);
@@ -52,6 +94,7 @@ const EventDetail = () => {
 
   return (
     <div className="flex flex-col items-center">
+      {contextHolder}
       <img
         src={photoLink}
         className="md:w-[600px] w-full h-[150px] rounded-3xl px-2 mt-8 mb-4"
@@ -86,28 +129,18 @@ const EventDetail = () => {
       </div>
       <div>
         <div className="people flex justify-center mt-4 mb-2">
-          <img
-            src={event.photo}
-            className="w-[32px] h-[32px] rounded-2xl person"
-          />
-          <img
-            src={event.photo}
-            className="w-[32px] h-[32px] rounded-2xl person"
-          />
-          <img
-            src={event.photo}
-            className="w-[32px] h-[32px] rounded-2xl person"
-          />
-          <img
-            src={event.photo}
-            className="w-[32px] h-[32px] rounded-2xl person"
-          />
-          <img
-            src={event.photo}
-            className="w-[32px] h-[32px] rounded-2xl person"
-          />
+          {event.confirmed_peoples.length &&
+            event.confirmed_peoples.map(c => {
+              return (
+                <img
+                  key={c.id}
+                  src={c.user.photo}
+                  className="w-[32px] h-[32px] rounded-2xl person"
+                />
+              )
+            })}
         </div>
-        <Button className="primary-button rounded-2xl">
+        <Button onClick={confirmPresence} className="primary-button rounded-2xl">
           CONFIRMAR PRESENÇA
         </Button>
       </div>
