@@ -42,16 +42,16 @@ const Login = () => {
       error("Usuário ja existe ou senha incorreta.");
     }
   };
+
   const onFinishFailed = (errorInfo) => {
     error("Preencha todos os campos do formulário");
     console.log("Failed:", errorInfo);
   };
+
   const navigateToSignup = () => {
     navigate("/signup");
   };
-  const changePassword = () => {
-    console.log("clicou");
-  };
+
   return (
     <div className="flex flex-col items-center">
       {contextHolder}
@@ -94,13 +94,7 @@ const Login = () => {
           />
         </Form.Item>
 
-        <Form.Item className="mt-0 text-right">
-          <a onClick={changePassword} className="forgot-password">
-            Esqueci minha senha
-          </a>
-        </Form.Item>
-
-        <Form.Item className="mb-4">
+        <Form.Item className="mb-3">
           <Button className="primary-button" htmlType="submit" block>
             ENTRAR
           </Button>

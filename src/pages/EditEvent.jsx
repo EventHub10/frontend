@@ -50,6 +50,10 @@ const EditEvent = () => {
     return imageRegex.test(link);
   };
 
+  const deleteEvent = () => {
+    console.log('deletar')
+  }
+
   useEffect(() => {
     if (isImageLink(inputPhoto)) {
       setPhotoLink(inputPhoto);
@@ -95,7 +99,7 @@ const EditEvent = () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-        className="md:w-[600px] w-full p-8"
+        className="md:w-[600px] w-full p-8 pb-0"
       >
         <Form.Item
           name="title"
@@ -168,12 +172,22 @@ const EditEvent = () => {
           <Input type="date" className="custom-input" />
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item className="mb-3">
           <Button className="primary-button" htmlType="submit" block>
             ATUALIZAR EVENTO
           </Button>
         </Form.Item>
       </Form>
+      <div className="md:w-[600px] w-full px-8 pt-0 pb-8">
+        <Button
+          className="delete-button"
+          htmlType="submit"
+          block
+          onClick={deleteEvent}
+        >
+          EXCLUIR EVENTO
+        </Button>
+      </div>
     </div>
   );
 };

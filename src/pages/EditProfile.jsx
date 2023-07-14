@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../store/actions";
 
@@ -9,11 +9,11 @@ import { Button, Form, Input, message } from "antd";
 const EditProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [photoLink, setPhotoLink] = useState("");
-  const [inputPhoto, setInputPhoto] = useState("");
-  const user = useSelector((state) => state.user);
+  const [inputPhoto, setInputPhoto] = useState(user.photo);
 
   const success = () => {
     messageApi.open({
@@ -31,36 +31,38 @@ const EditProfile = () => {
     });
   };
 
-  const onFinish = async(values) => {
-
+  const onFinish = async (values) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": localStorage.getItem("token"),
+        Authorization: localStorage.getItem("token"),
       },
     };
-  
+
     let formUser = {
       id: user.id,
       name: values.name,
       photo: values.photo,
       email: user.email,
-      password: user.password
+      password: user.password,
     };
 
     try {
-      let result = await axios.put("http://localhost:5101/api/user", formUser, config)
-      if(result.status === 200){
+      let result = await axios.put(
+        "http://localhost:5101/api/user",
+        formUser,
+        config
+      );
+      if (result.status === 200) {
         success();
         form.resetFields();
         setPhotoLink("");
         dispatch(updateUser(result.data));
         navigate("/profile");
       }
-    }catch(exception){
-      onFinishFailed(exception.message)
+    } catch (exception) {
+      onFinishFailed(exception.message);
     }
-    
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -73,9 +75,12 @@ const EditProfile = () => {
     return imageRegex.test(link);
   };
 
+  const deletProfile = () => {
+    console.log("deletar perfil");
+  };
 
   useEffect(() => {
-    if(!!inputPhoto){
+    if (!inputPhoto) {
       if (isImageLink(inputPhoto)) {
         setPhotoLink(inputPhoto);
       } else {
@@ -109,7 +114,7 @@ const EditProfile = () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-        className="md:w-[600px] w-full p-8"
+        className="md:w-[600px] w-full p-8 pb-0"
       >
         <Form.Item
           name="name"
@@ -133,12 +138,22 @@ const EditProfile = () => {
           />
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item className="mb-3">
           <Button className="primary-button" htmlType="submit" block>
             ATUALIZAR PERFIL
           </Button>
         </Form.Item>
       </Form>
+      <div className="md:w-[600px] w-full px-8 pt-0 pb-8">
+        <Button
+          className="delete-button"
+          htmlType="submit"
+          block
+          onClick={deletProfile}
+        >
+          EXCLUIR PERFIL
+        </Button>
+      </div>
     </div>
   );
 };
