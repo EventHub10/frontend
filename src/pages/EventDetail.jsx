@@ -8,9 +8,11 @@ import { EditOutlined } from "@ant-design/icons";
 import { Button, message } from "antd";
 import InfoButton from "../components/InfoButton";
 import { useSelector } from "react-redux";
+import {useNavigate} from 'react-router-dom'
 
 const EventDetail = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const [photoLink, setPhotoLink] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
@@ -66,6 +68,10 @@ const EventDetail = () => {
   };
 
   const confirmPresence = async () => {
+    if(!user.id){
+      navigate("/login")
+      return
+    }
     const config = {
       headers: {
         "Content-Type": "application/json",
