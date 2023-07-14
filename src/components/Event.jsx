@@ -1,13 +1,14 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 
 import { EditOutlined } from "@ant-design/icons";
 
-const Event = ({ event, userId }) => {
+const Event = ({ event}) => {
+  const user = useSelector((state) => state.user);
   Event.propTypes = {
     event: PropTypes.object,
-    userId: PropTypes.string,
   };
 
   const isImageLink = (link) => {
@@ -32,9 +33,9 @@ const Event = ({ event, userId }) => {
           <span>{dayjs(event.event_date).format("DD/MM/YYYY")}</span>
         </div>
       </div>
-      {userId === event.ownerId && (
+      {user && user.id === event.ownerId && (
         <div className="flex justify-center mt-[8px]">
-          <Link to={`/edit-event:${userId}`} className="edit-button">
+          <Link to={`/edit-event:${event.id}`} className="edit-button">
             <EditOutlined className="text-[14px] text-white icon" />
           </Link>
         </div>

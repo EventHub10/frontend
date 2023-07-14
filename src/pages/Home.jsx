@@ -1,44 +1,45 @@
 import Event from "../components/Event";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import {useNavigate} from 'react-router-dom'
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { updateEvents } from "../store/actions";
 
 const Home = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const events = useSelector((state) => state.events);
   const navigate = useNavigate();
-  const [events, setEvents] = useState([]);
 
-  const getEvents = async() => {
-    let config = {
+  const getEvents = async () => {
+    const config = {
       headers: {
-        "Authorization": localStorage.getItem("token")
-      }
-    }
+        Authorization: localStorage.getItem("token"),
+      },
+    };
 
-    let { data } = await axios.get("http://localhost:5101/api/event", config);
-
-    setEvents(data)
-  }
+    const { data } = await axios.get("http://localhost:5101/api/event", config);
+    dispatch(updateEvents(data));
+  };
 
   const teste = () => {
-    console.log(user)
-  }
+    console.log(user);
+  };
 
   useEffect(() => {
-    getEvents()
-  }, [navigate])
+    getEvents();
+  }, [navigate]);
 
   return (
     <div className="events w-full flex flex-col justify-center my-8 px-4 gap-2">
       <p className="text-white">user: {user.name}</p>
-      <button className="text-white" onClick={teste}>click</button>
-      {events && events.map(event => {
-        const userId = localStorage.getItem("userId")
-        return (
-          <Event key={event.id} userId={userId} event={event} />
-        )
-      })}
+      <button className="text-white" onClick={teste}>
+        click
+      </button>
+      {events &&
+        events.map((item) => {
+          return <Event key={item.id} event={item} />;
+        })}
     </div>
   );
 };

@@ -37,7 +37,8 @@ const Login = () => {
         console.log("user 2", user);
         navigate("/");
       }
-    } catch (error) {
+    } catch (er) {
+      console.error('Erro: ', er)
       error("Usuário ja existe ou senha incorreta.");
     }
   };

@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
   counter: 0,
   user: {},
+  events: []
 };
 
 const actionsReducer = (state = INITIAL_STATE, action) => {
@@ -9,6 +10,12 @@ const actionsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         user: action.content,
+      };
+
+    case "UPDATE_EVENTS":
+      return {
+        ...state,
+        events: action.content,
       };
 
     default:

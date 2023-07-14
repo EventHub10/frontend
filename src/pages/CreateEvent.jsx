@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { updateEvents } from "../store/actions";
 
 import { Button, Form, Input, message } from "antd";
 
 const SignUp = () => {
+  const dispatch = useDispatch();
+  const events = useSelector((state) => state.events);
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -36,6 +41,7 @@ const SignUp = () => {
   const onFinish = async (values) => {
     const formEvent = {
       ownerId: localStorage.getItem("userId") ?? null,
+      owner: user.id,
       event_title: values.title,
       event_photo: values.photo,
       event_date: values.event_date,
@@ -53,6 +59,7 @@ const SignUp = () => {
       );
       if (result.status === 200) {
         success();
+        dispatch(updateEvents([...events, result.data]));
         form.resetFields();
         navigate("/");
       }

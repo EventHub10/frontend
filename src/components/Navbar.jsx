@@ -28,7 +28,7 @@ function Navbar() {
     {
       key: "2",
       label: (
-        <Link to={user.id ? "/profile" : "/login"}>
+        <Link to={user.id ? "/create-event" : "/login"}>
           <h1 className="font-bold text-lg">Cadastrar evento</h1>
           <p>Crie um evento.</p>
         </Link>
