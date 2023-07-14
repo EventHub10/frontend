@@ -105,7 +105,7 @@ const SignUp = () => {
           />
         </Form.Item>
 
-        <Form.Item name="photo" rules={[{ required: false }]}>
+        <Form.Item name="photo" rules={[{ required: true }]}>
           <Input
             prefix={<PictureOutlined className="primary-color" />}
             type="name"
